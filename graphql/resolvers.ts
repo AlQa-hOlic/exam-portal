@@ -1,9 +1,9 @@
-import prisma from '../prisma/client'
+import { Context } from './context'
 
 export const resolvers = {
   Query: {
-    users: async () => {
-      return await prisma.user.findMany()
+    users: async (parent, args, ctx: Context) => {
+      return await ctx.db.user.findMany()
     },
   },
 }

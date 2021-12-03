@@ -16,6 +16,12 @@ const options: NextAuthOptions = {
   ],
   adapter: PrismaAdapter(prisma),
   secret: process.env.SECRET,
+  pages: {
+    signIn: '/signin',
+    signOut: '/signout',
+    verifyRequest: '/verify',
+    error: '/error',
+  },
 }
 
 export default handler
