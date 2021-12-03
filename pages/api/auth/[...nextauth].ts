@@ -22,6 +22,9 @@ const options: NextAuthOptions = {
     verifyRequest: '/verify',
     error: '/error',
   },
+  jwt: {
+    secret: process.env.SECRET,
+  },
 }
 
 export default handler

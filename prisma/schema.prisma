@@ -45,14 +45,16 @@ model Session {
 // }
 
 model User {
-  id            String    @id @default(cuid())
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  email         String?   @unique
-  emailVerified DateTime?
-  role          String?   @default("user")
+  id                String             @id @default(cuid())
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  email             String?            @unique
+  emailVerified     DateTime?
+  role              String?            @default("user")
   // accounts      Account[]
-  sessions      Session[]
+  sessions          Session[]
+  examRegistrations ExamRegistration[]
+  examSubmissions   ExamSubmission[]
 }
 
 model VerificationToken {
@@ -61,4 +63,71 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Exam {
+  id                String             @id @default(cuid())
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  title             String
+  questions         Question[]
+  examRegistrations ExamRegistration[]
+  examSubmissions   ExamSubmission[]
+}
+
+model Question {
+  id                    String                 @id @default(cuid())
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  title                 String
+  examId                String
+  exam                  Exam                   @relation(fields: [examId], references: [id])
+  correctAnswerId       String?
+  answers               Answer[]
+  examSubmissionAnswers ExamSubmissionAnswer[]
+}
+
+model Answer {
+  id                    String                 @id @default(cuid())
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  title                 String
+  questionId            String
+  question              Question               @relation(fields: [questionId], references: [id])
+  examSubmissionAnswers ExamSubmissionAnswer[]
+}
+
+model ExamRegistration {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  startBefore DateTime @default(now())
+  due         DateTime @default(now())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  examId      String
+  exam        Exam     @relation(fields: [examId], references: [id])
+}
+
+model ExamSubmission {
+  id                    String                 @id @default(cuid())
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  userId                String
+  user                  User                   @relation(fields: [userId], references: [id])
+  examId                String
+  exam                  Exam                   @relation(fields: [examId], references: [id])
+  examSubmissionAnswers ExamSubmissionAnswer[]
+}
+
+model ExamSubmissionAnswer {
+  id               String         @id @default(cuid())
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  examSubmissionId String
+  examSubmission   ExamSubmission @relation(fields: [examSubmissionId], references: [id])
+  questionId       String
+  question         Question       @relation(fields: [questionId], references: [id])
+  answerId         String
+  answer           Answer         @relation(fields: [answerId], references: [id])
 }
