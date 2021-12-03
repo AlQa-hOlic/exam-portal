@@ -1,0 +1,23 @@
+services:
+  # app:
+  #   build: .
+  #   ports:
+  #     - 3000:3000
+  # db:
+  #   image: postgres:14-alpine
+  #   environment:
+  #     - POSTGRES_USER=user
+  #     - POSTGRES_PASSWORD=password
+  #     - POSTGRES_DB=exam-portal
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+  #   ports:
+  #     - 5432:5432
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 1025:1025 # SMTP server ports
+      - 8025:8025 # Web UI ports
+
+# volumes:
+#   pgdata:
